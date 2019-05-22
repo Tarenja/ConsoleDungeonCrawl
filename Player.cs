@@ -8,20 +8,23 @@ namespace DungeonCrawl
 {
     class Player
     {
-        public static int health = 20;
+        public static int health = 15;
         public static string gender;
         public static string race;
         public static string playerClass;
-        public static string[] inventory = new string[20];
+        public static int meleeAttack = 1;
+        public static int rangedAttack = 1;
+        public static int magicAttack = 1;
+        public static int gold = 0;
         public static bool characterDone = false;
+        public static int exp = 0;
 
         public static void CharacterCreation()
         {
             Console.WriteLine("So to create your characters you get to pick your gender, race and class.\n" +
                 "Your stats are: Melee, Magic, Ranged and Health.\n" +
                 "Each class and race has different bonuses for these stats.\n" +
-                "All of them start at 1, except for Health which starts at 15.\n" +
-                "The way it works is you will get a list of options, and you will type the one you want.\n");
+                "All of them start at 1, except for Health which starts at 15.\n");
             Console.Clear();
             GenderSelection();
         }
@@ -81,18 +84,30 @@ namespace DungeonCrawl
                 {
                     case "human":
                         race = "Human";
+                        magicAttack++;
+                        rangedAttack++;
+                        meleeAttack++;
+                        health++;
                         correct = 1;
                         break;
                     case "elf":
                         race = "Elf";
+                        magicAttack += 2;
+                        rangedAttack++;
+                        health++;
                         correct = 1;
                         break;
                     case "dwarf":
                         race = "Dwarf";
+                        rangedAttack += 2;
+                        meleeAttack++;
+                        magicAttack++;
                         correct = 1;
                         break;
                     case "troll":
                         race = "Troll";
+                        meleeAttack += 2;
+                        health += 2;
                         correct = 1;
                         break;
                     default:
@@ -123,14 +138,22 @@ namespace DungeonCrawl
                 {
                     case "warrior":
                         playerClass = "Warrior";
+                        meleeAttack += 2;
+                        rangedAttack++;
+                        health++;
                         correct = 1;
                         break;
                     case "mage":
                         playerClass = "Mage";
+                        magicAttack += 3;
+                        rangedAttack++;
                         correct = 1;
                         break;
                     case "rogue":
                         playerClass = "Rogue";
+                        rangedAttack += 2;
+                        meleeAttack++;
+                        magicAttack++;
                         correct = 1;
                         break;
                     default:
@@ -147,7 +170,8 @@ namespace DungeonCrawl
             do
             {
                 Console.WriteLine("You have chosen to play a " + gender + " " + race + " " + playerClass + "\n" +
-                    "Are you happy with this character? Please type Yes or No.\n");
+                    "Your stats are: " + "health: " + health + ", melee: " + meleeAttack + ", ranged: " + rangedAttack + ", magic: " + magicAttack +
+                    "\nAre you happy with this character? Please type Yes or No.\n");
                 Console.Write("Your choice: ");
                 finished = Console.ReadLine().ToLower();
             } while (finished != "yes" && finished != "y" && finished != "no" && finished != "n");

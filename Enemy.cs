@@ -9,6 +9,18 @@ namespace DungeonCrawl
     class Enemy
     {
         public int health;
-        public string[] loot = new string[3];
+        public int damage;
+        public int loot;
+        public int expReward;
+
+        public Enemy(int _health, int _damage, int _loot, int _expReward)
+        {
+            health = _health;
+            damage = _damage;
+            loot = _loot;
+            expReward = _expReward;
+        }
     }
+
+
 }
