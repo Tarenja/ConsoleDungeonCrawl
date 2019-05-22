@@ -18,6 +18,7 @@ namespace DungeonCrawl
         public static int gold = 0;
         public static bool characterDone = false;
         public static int exp = 0;
+        static string combatType;
 
         public static void CharacterCreation()
         {
@@ -111,7 +112,6 @@ namespace DungeonCrawl
                         correct = 1;
                         break;
                     default:
-                        Console.WriteLine("\nValue not recognised.");
                         Console.Clear();
                         break;
                 }
@@ -157,7 +157,6 @@ namespace DungeonCrawl
                         correct = 1;
                         break;
                     default:
-                        Console.WriteLine("\nValue not recognised.");
                         Console.Clear();
                         break;
                 }
@@ -183,6 +182,41 @@ namespace DungeonCrawl
             {
                 GenderSelection();
             }
+        }
+
+        public static string SelectCombatType()
+        {
+            int correct = 0;
+            do
+            {
+                Console.WriteLine("How would you like to attack?\n" +
+                    "1. Melee\n" +
+                    "2. Magic\n" +
+                    "3. Ranged\n");
+                string type = Console.ReadLine().ToLower();
+                switch (type)
+                {
+                    case "melee":
+                        combatType = "melee attack";
+                        correct = 1;
+                        break;
+                    case "magic":
+                        combatType = "magic attack";
+                        correct = 1;
+                        break;
+                    case "ranged":
+                        combatType = "ranged attack";
+                        correct = 1;
+                        break;
+                    default:
+                        Console.Clear();
+                        break;
+                }
+            } while (correct == 0);
+            Console.WriteLine("\nYou have selected to do a " + combatType + ".\n\n" +
+                "Please hit 'Enter' to continue.\n");
+            Console.ReadLine();
+            return combatType;
         }
     }
 }

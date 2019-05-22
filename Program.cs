@@ -8,7 +8,14 @@ namespace DungeonCrawl
 {
     class Program
     {
-        int damage = 2;
+        static int playerDamage = 2;
+        static int damageResult;
+        static int enemyDamage = 2;
+        static int loot = 5;
+        static int health = 10;
+        static int exp = 20;
+        static int diceRoll;
+        static string diceResult;
 
         static void Main(string[] args)
         {
@@ -40,7 +47,7 @@ namespace DungeonCrawl
                 "This game uses a d20 'dice rolling' mechanic to randomly generate a number between 1 and 20,\n" +
                 "and the result will determine what you run into.\n\n" +
                 "A 1 is a critical failure, you will enounter a really tough enemy!\n" +
-                "A 20 is a critical success, you will find an epic piece of loot!\n\n" +
+                "A 20 is a critical success, you will find a big pile of loot!\n\n" +
                 "Hit 'Enter' when you are ready to continue the tutorial.");
             Console.ReadLine();
             Console.WriteLine("If you encounter an enemy, you will enter a fight, at which point you can choose\n" +
@@ -54,9 +61,73 @@ namespace DungeonCrawl
                 "If the monster is not dead, it can then try to hit you, using the same dice mechanics, this will decrease your health.\n" +
                 "Let's try it out shall we?\n");
             Console.WriteLine("Press 'Enter' when you are ready to try out combat!");
-            Console.ReadLine();
         }
 
+        public static void FightGoblin()
+        {
+            Enemy goblin = new Enemy(health, enemyDamage, loot, exp);
+
+            int hit = goblin.attackPlayer();
+            Console.WriteLine("The goblin hits you for " + hit + " damage.");
+            Player.health -= hit;
+            Console.WriteLine("You have " + Player.health + "health left.");
+        }
+
+        public static int RollDiceForEncounter()
+        {
+            Random rnd = new Random();
+            diceRoll = rnd.Next(1, 21);
+            Console.WriteLine("You rolled a " + diceRoll);
+            if (diceRoll == 1)
+            {
+                diceResult = "a tough enemy!";
+            }
+            else if (diceRoll >= 2 && diceRoll <= 11)
+            {
+                diceResult = "an enemy";
+            }
+            else if (diceRoll >= 12 && diceRoll <= 16)
+            {
+                diceResult = "nothing";
+            }
+            else if (diceRoll >= 14 && diceRoll <= 19)
+            {
+                diceResult = "some loot!";
+            }
+            else if (diceRoll == 20)
+            {
+                diceResult = "big pile of loot!";
+            }
+            return diceRoll;
+        }
+
+        public static int RollDiceForCombat()
+        {
+            Random rnd = new Random();
+            diceRoll = rnd.Next(1, 21);
+            Console.WriteLine("You rolled a " + diceRoll);
+            if (diceRoll == 1)
+            {
+                diceResult = "Critical Fail";
+            }
+            else if (diceRoll >= 2 && diceRoll <= 6)
+            {
+                diceResult = "miss";
+            }
+            else if (diceRoll >= 7 && diceRoll <= 13)
+            {
+                diceResult = "hit";
+            }
+            else if (diceRoll >= 14 && diceRoll <= 19)
+            {
+                diceResult = "hit hard";
+            }
+            else if (diceRoll == 20)
+            {
+                diceResult = "Critical Hit";
+            }
+            return diceRoll;
+        }
 
     }
 }

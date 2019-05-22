@@ -20,7 +20,10 @@ namespace DungeonCrawl
             loot = _loot;
             expReward = _expReward;
         }
+
+        public int attackPlayer()
+        {
+            return damage;
+        }
     }
-
-
 }
