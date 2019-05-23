@@ -26,12 +26,14 @@ namespace DungeonCrawl
         {
             Console.WriteLine("Welcome to my fun little dungeon crawler game!\n" +
                 "This game currently includes only a tutorial level.\n" +
-                "The goal in the tutorial level is to get to 100 gold before you die." +
+                "The goal in the tutorial level is to get to 100 gold before you die.\n" +
                 "Gameplay is based on a d20 (twenty-sided-die) dice roll, just like D&D, plus whatever bonuses you have.\n" +
                 "The way this works is you will get a list of options, and you will type the option you want.\n" +
                 "Press 'Enter' to play!");
             Console.ReadLine();
             Console.Clear();
+            // Character creation is part of the Player class, since there is only ever 1 player
+            // I chose to use the class rather than an object instantiated by the class.
             Player.CharacterCreation();
             if(Player.characterDone)
             {
@@ -39,6 +41,7 @@ namespace DungeonCrawl
             }
         }
 
+        // This function explains how the game works and a little about the 'dice' mechanics
         static void Tutorial()
         {
             Console.Clear();
@@ -63,43 +66,54 @@ namespace DungeonCrawl
                 "Let's try it out shall we?\n");
             Console.WriteLine("Press 'Enter' when you are ready to try out an encounter!");
             Console.ReadLine();
+            Console.Clear();
             RoomEncounter();
         }
 
+        // This function keeps the player moving through different rooms, 
+        // and initiates different functions based on what's in the room
         public static void RoomEncounter()
         {
+            // I have two separate dice roll functions, this one is to determine what the player runs into
             RollDiceForEncounter();
             Console.WriteLine("You walk into the next room and you find " + diceResult);
             if (diceRoll <= 12)
             {
                 if (diceRoll == 1)
                 {
+                    // Generate a new tough skeleton based on the Enemy Class
                     Enemy skeleton = new Enemy(enemyHealth * 2, enemyDamage * 2, enemyLoot * 2, expReward * 2, "skeleton");
                     Console.WriteLine("You have run into a big skeleton!\n");
                     Console.WriteLine("Your health is currenty at {0}.\n", Player.health);
+                    // Initiates the combat function against the skeleton
                     Combat(skeleton);
                 }
                 else
                 {
+                    // create a new goblin from the Enemy Class
                     Enemy goblin = new Enemy(enemyHealth, enemyDamage, enemyLoot, expReward, "goblin");
                     Console.WriteLine("You have run into a goblin!\n");
+                    // initiates combat against the goblin
                     Combat(goblin);
                 }
             }
             else if (diceRoll >= 16 && diceRoll <= 19)
             {
+                // if the player finds a room with a normal amount of loot in
                 int loot = RandomLoot("normal");
                 Player.gold += loot;
                 Console.WriteLine("You now have {0} gold.\n", Player.gold);
             }
             else if (diceRoll == 20)
             {
+                // if the player finds a big pile of loot
                 int loot = RandomLoot("epic");
                 Player.gold += loot;
                 Console.WriteLine("You now have {0} gold!\n", Player.gold);
             }
             if (Player.gold >= 100)
             {
+                // essentially ending/restarting the game when you reach 100 gold
                 Console.WriteLine("\n\nA Winner is You!\n" +
                     "You have gathered enough gold to retire and live the good life!\n" +
                     "Well done on completing this little tutorial level/game!\n" +
@@ -109,19 +123,24 @@ namespace DungeonCrawl
                 Console.Clear();
                 GameStart();
             }
+            // if the player isn't dead and doesn't have 100 gold, they keep moving through rooms
             Console.Write("\nPress enter to continue to the next room.\n");
             Console.ReadLine();
             Console.Clear();
             RoomEncounter();
         }
 
+        // this functions controls the combat actions
         public static void Combat(Enemy enemy)
         {
+            // keeps the combat loop going until either the monster or the player is dead
             do
             {
                 string action = Player.SelectCombatType();
+                // combat is also based on a dice roll to see if the hit succeeds or not
                 RollDiceForCombat();
                 Console.WriteLine("That's a {0}", diceResult);
+                // add bonuses to the damage based on which type of attack is used
                 if (action == "melee attack")
                 {
                     playerDamageResult = playerDamage + Player.meleeAttack;
@@ -135,11 +154,13 @@ namespace DungeonCrawl
                     playerDamageResult = playerDamage + Player.rangedAttack;
                 }
                 PlayerAttack(action, enemy);
+                // this is here to make sure the enemy doesn't get another attack if its health goes below 0
                 if (enemy.health > 0)
                 {
                     FightMonster(enemy);
                 }
             } while (Player.health > 0 && enemy.health > 0);
+            // ending the game if the player dies
             if (Player.health <= 0)
             {
                 Console.WriteLine("You have died!\n" +
@@ -148,6 +169,7 @@ namespace DungeonCrawl
                 Console.Clear();
                 GameStart();
             }
+            //giving the player loot and xp if the enemy dies
             else if (enemy.health <= 0)
             {
                 Console.WriteLine("You won! The {0} is dead!\n\n" +
@@ -158,6 +180,7 @@ namespace DungeonCrawl
             }
         }
 
+        // I have two separate dice roll functions, this one is to determine what the player runs into in a room
         public static int RollDiceForEncounter()
         {
             Random rnd = new Random();
@@ -186,6 +209,7 @@ namespace DungeonCrawl
             return diceRoll;
         }
 
+        // this dice rolling function is used in combat to determine if the attack hits or misses
         public static int RollDiceForCombat()
         {
             Random rnd = new Random();
@@ -214,13 +238,20 @@ namespace DungeonCrawl
             return diceRoll;
         }
 
+        // this function runs to check how much damage the player does if any
         public static void PlayerAttack(string action, Enemy enemy)
         {
             if (diceRoll == 1)
             {
                 Console.WriteLine("You stumble and take damage!\n" +
                     "You have {0} health left.", Player.health);
+                playerDamageResult = 0;
                 Player.health--;
+            }
+            if (diceRoll >= 2 && diceRoll <= 6)
+            {
+                Console.WriteLine("You do no damage!");
+                playerDamageResult = 0;
             }
             if (diceRoll >= 7 && diceRoll <= 13)
             {
@@ -236,7 +267,7 @@ namespace DungeonCrawl
             else if (diceRoll == 20)
             {
                 Console.WriteLine("\nYou hit the {0} with a {1}!", enemy.name, action);
-                playerDamageResult *= 2;
+                playerDamageResult = playerDamageResult * 2;
                 Console.WriteLine("You hit the {0} for {1} damage.", enemy.name, playerDamageResult);
             }
             enemy.health -= playerDamageResult;
@@ -245,6 +276,7 @@ namespace DungeonCrawl
             Console.Clear();
         }
 
+        // this function checks how much damage the enemy does to the player if any
         public static void FightMonster(Enemy monster)
         {
             int hit = 0;
@@ -255,6 +287,10 @@ namespace DungeonCrawl
             {
                 Console.WriteLine("The {0} stumbles and takes damage!", monster.name);
                 monster.health--;
+            }
+            if (diceRoll >= 2 && diceRoll <= 6)
+            {
+                Console.WriteLine("The {0} does no damage!", monster.name);
             }
             if (diceRoll >= 7 && diceRoll <= 13)
             {
@@ -278,6 +314,7 @@ namespace DungeonCrawl
             Console.Clear();
         }
 
+        // this function randomly gives the player a certain amount of loot if they hit a room with loot in it
         static int RandomLoot(string type)
         {
             Random rnd = new Random();

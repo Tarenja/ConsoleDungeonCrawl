@@ -8,6 +8,8 @@ namespace DungeonCrawl
 {
     class Enemy
     {
+        // this class is fairly small, it didn't need much, just enough to be able to create 
+        // multiple enemy types
         public int health;
         public int damage;
         public int loot;
@@ -23,6 +25,7 @@ namespace DungeonCrawl
             expReward = _expReward;
         }
 
+        // this function will return whatever damage the creature has in combat
         public int attackPlayer()
         {
             return damage;

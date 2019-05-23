@@ -20,6 +20,9 @@ namespace DungeonCrawl
         public static int exp = 0;
         static string combatType;
 
+        // I chose to make charactercreation a part of the character Class to keep the main program cleaner
+        // there is only ever going to be 1 player, so I chose to modify it directly rather than modifying an object
+        // again to keep the main program free of clutter
         public static void CharacterCreation()
         {
             Console.WriteLine("So to create your characters you get to pick your gender, race and class.\n" +
@@ -27,15 +30,18 @@ namespace DungeonCrawl
                 "Each class and race has different bonuses for these stats.\n" +
                 "All of them start at 1, except for Health which starts at 15.\n");
             Console.Clear();
+            // I only trigger genderselection here to start the chain of creation functions
             GenderSelection();
         }
 
         static void GenderSelection()
         {
+            // this is to help keep track if the user enters a correct answer or not
             int correct = 0;
+            // the gender doesn't actually matter but it's nice to have in here
             do
             {
-                Console.WriteLine("First, please select your gender you would like to be: \n" +
+                Console.WriteLine("First, please select the gender you would like to be: \n" +
                     "1. Female\n" +
                     "2. Male\n" +
                     "3. Non-binary\n");
@@ -69,6 +75,8 @@ namespace DungeonCrawl
             RaceSelection();
         }
 
+        // this is for selecting the race, which will add bonuses to certain types of damage
+        // this and the class selection functions are very similar
         static void RaceSelection()
         {
             int correct = 0;
@@ -123,6 +131,7 @@ namespace DungeonCrawl
             ClassSelection();
         }
 
+        // the classes here again will modify the values of the damage types and health
         static void ClassSelection()
         {
             int correct = 0;
@@ -166,6 +175,7 @@ namespace DungeonCrawl
             Console.ReadLine();
             Console.Clear();
             string finished;
+            // this is just to give the option for the player to change their stats if they want to
             do
             {
                 Console.WriteLine("You have chosen to play a " + gender + " " + race + " " + playerClass + "\n" +
@@ -184,6 +194,8 @@ namespace DungeonCrawl
             }
         }
 
+        // this could have been in the main program, but it felt cleaner to do here, since it's
+        // another selection the player has to make in regards to the character
         public static string SelectCombatType()
         {
             int correct = 0;
@@ -193,6 +205,7 @@ namespace DungeonCrawl
                     "1. Melee\n" +
                     "2. Magic\n" +
                     "3. Ranged\n");
+                Console.Write("Your choice: ");
                 string type = Console.ReadLine().ToLower();
                 switch (type)
                 {
