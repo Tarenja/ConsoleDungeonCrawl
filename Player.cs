@@ -213,9 +213,6 @@ namespace DungeonCrawl
                         break;
                 }
             } while (correct == 0);
-            Console.WriteLine("\nYou have selected to do a " + combatType + ".\n\n" +
-                "Please hit 'Enter' to continue.\n");
-            Console.ReadLine();
             return combatType;
         }
     }

@@ -12,9 +12,11 @@ namespace DungeonCrawl
         public int damage;
         public int loot;
         public int expReward;
+        public string name;
 
-        public Enemy(int _health, int _damage, int _loot, int _expReward)
+        public Enemy(int _health, int _damage, int _loot, int _expReward, string _name)
         {
+            name = _name;
             health = _health;
             damage = _damage;
             loot = _loot;
